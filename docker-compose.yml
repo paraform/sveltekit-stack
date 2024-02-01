@@ -1,0 +1,15 @@
+name: postgres
+version: '3.9'
+services:
+  db:
+    container_name: postgres
+    image: supabase/postgres:15.1.0.147
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - ./volumes/db/data:/var/lib/postgresql/data:Z
