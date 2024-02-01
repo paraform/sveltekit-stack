@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let data;
-	$: allTasks = data.allTasks;
+	$: tasks = data.tasks;
 </script>
 
 <div class="prose">
@@ -12,12 +12,12 @@
 		<div class="px-10">
 			<table>
 				<tbody>
-					{#each allTasks as item}
+					{#each tasks as task}
 						<tr>
 							<th>
-								<h3>{item.name}</h3>
+								<h3>{task.name}</h3>
 							</th>
-							<th class="shade"><h3>{item.id}</h3></th>
+							<th class="shade"><h3>{task.id}</h3></th>
 						</tr>
 					{/each}
 				</tbody>
