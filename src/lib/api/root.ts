@@ -1,25 +1,15 @@
 import { Hono } from 'hono';
-import type { TaskType } from '../db/types';
 import { db } from '@/db/db.server';
+import { taskRouter } from './routers/task';
+import type { Variables } from './context';
 
-type Variables = {
-	database: typeof db;
-};
-
-export const router = new Hono<{ Variables: Variables }>().get('/tasks', async (c) => {
-	try {
-		const tasks = await c.get('database').query.tasks.findMany();
-		return c.json<TaskType[]>(tasks);
-	} catch {
-		(err: Error) => c.json({ error: err }, 400);
-	}
+const app = new Hono<{ Variables: Variables }>().use('*', async (c, next) => {
+	c.set('database', db);
+	await next();
 });
 
-export const api = new Hono<{ Variables: Variables }>()
-	.use('*', async (c, next) => {
-		c.set('database', db);
-		await next();
-	})
-	.route('/api', router);
+export const router = app.basePath('/api').route('/tasks', taskRouter);
+
+export default app;
 
 export type Router = typeof router;
